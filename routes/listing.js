@@ -28,7 +28,8 @@ const { destroyListing } = require("../controllers/listing.js");
 
 //Index route
 router.get("/", wrapAsync(index));
-
+// Add this line to your routes file if not already present
+router.get("/search", wrapAsync(listingController.search));
 //New route
 router.get("/new",isLoggedIn, renderNewForm);
 

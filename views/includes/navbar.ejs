@@ -1,33 +1,55 @@
 <nav class="navbar navbar-expand-md bg-body-tertiary border-bottom sticky-top" style="height: 5rem;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/listing"><i class="fa-solid fa-compass" ></i></a>
+        <a class="navbar-brand" href="/listing"><i class="fa-solid fa-compass"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <!-- <a class="nav-link " href="/">Home</a> -->
                 <a class="nav-link" href="/listing">Explore</a>
-                <a class="nav-link" href="/listing/new">Add new Listing</a> 
+                <a class="nav-link" href="/listing/new">Add new Listing</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search destinations" aria-label="Search">
+                <form class="d-flex" role="search" onsubmit="return logSearch(event)">
+                    <input class="form-control me-2" type="search" id="searchInput" placeholder="Search destinations" aria-label="Search">
                     <button class="btn btn-outline-dark" type="submit">Search</button>
-                  </form>
+                </form>
             </div>
             <div class="navbar-nav ms-auto">
-                
                 <% if(!currUser){ %> 
                     <a class="nav-link" href="/signup"><b>SignUp</b></a>
                     <a class="nav-link" href="/login"><b>Login</b></a>
                 <% } %>
                 <% if(currUser) {%>
-                    
-                <a class="nav-link" href="/logout"><b>Logout</b></a>
+                    <a class="nav-link" href="/logout"><b>Logout</b></a>
                 <% } %>
             </div>
-
         </div>
     </div>
 </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function logSearch(event) {
+        // Prevent default form submission
+        event.preventDefault();
+    
+        const searchInput = document.getElementById('searchInput').value;
+    
+        // Use Axios to make a GET request to the search endpoint
+        axios.get(`/listing/search`, {
+            params: {
+                query: searchInput
+            }
+        })
+        .then(response => {
+            // Assuming you want to navigate to the updated listings page
+            // You might want to pass search results as part of your state or query
+            window.location.href = `/listing/search?query=${encodeURIComponent(searchInput)}`;
+        })
+        .catch(error => {
+            console.error('Error fetching search results:', error);
+        });
+    }
+    
+</script>

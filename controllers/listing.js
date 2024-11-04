@@ -19,6 +19,29 @@ module.exports.index = async (req, res) => {
     res.render("listings/index", { allListings });
 };
 
+module.exports.search = async (req, res) => {
+    const { query } = req.query;
+    if (!query) {
+       // req.flash("error", "Search query cannot be empty!");
+        return res.redirect("/listing");
+    }
+
+    // Use a case-insensitive regex to find listings that match the query
+    const regex = new RegExp(query, 'i');
+    const results = await Listing.find({
+        $or: [
+            { title: regex },
+            { description: regex },
+            { location: regex },
+            { country: regex }
+        ]
+    });
+
+    res.render("listings/index", { allListings: results });
+};
+
+
+
 module.exports.renderNewForm = (req, res) => {
     res.render("listings/new");
 };
